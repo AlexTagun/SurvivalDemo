@@ -7,5 +7,6 @@ namespace SurvivalDemo.EcsCore.Configs
     public class SharedAssets : ScriptableObject
     {
         public PlayerView PlayerView;
+        public EnemyView EnemyView;
     }
 }

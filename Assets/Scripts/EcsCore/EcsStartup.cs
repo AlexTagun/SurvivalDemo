@@ -10,6 +10,7 @@ namespace SurvivalDemo.Startup
     {
         [SerializeField] private SharedAssets _sharedAssets;
         [SerializeField] private PlayerSpawnPoint _playerSpawnPoint;
+        [SerializeField] private Transform _cameraAnchor;
 
         private EcsWorld _world;
         private IEcsSystems _systems;
@@ -22,6 +23,9 @@ namespace SurvivalDemo.Startup
                 .Add(new UserKeyboardInputSystem())
                 .Add(new PlayerInitSystem(_playerSpawnPoint))
                 .Add(new UnitMoveSystem())
+                .Add(new CameraMoveSystem(_cameraAnchor))
+                .Add(new EnemyInitSystem())
+                .Add(new EnemyAiInputSystem())
 
                 // register your systems here, for example:
                 // .Add (new TestSystem1 ())

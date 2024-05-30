@@ -4,6 +4,7 @@ using SurvivalDemo.EcsCore.Configs;
 using SurvivalDemo.EcsCore.Views;
 using SurvivalDemo.Gameplay.SpawnPoints;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SurvivalDemo.EcsCore.Systems
 {
@@ -33,11 +34,14 @@ namespace SurvivalDemo.EcsCore.Systems
             _controlledByPlayerPool.Add(playerEntity);
 
             Transform transform = _spawnPoint.transform;
-            PlayerView playerGo = Object.Instantiate(_sharedAssets.PlayerView, transform.position, transform.rotation);
+            Vector3 position = transform.position;
+            Quaternion rotation = transform.rotation;
+
+            PlayerView playerGo = Object.Instantiate(_sharedAssets.PlayerView, position, rotation);
 
             unit.Transform = playerGo.transform;
-            unit.Position = Vector3.zero;
-            unit.Rotation = Quaternion.identity;
+            unit.Position = position;
+            unit.Rotation = rotation;
             unit.MoveSpeed = 3f;
         }
     }
