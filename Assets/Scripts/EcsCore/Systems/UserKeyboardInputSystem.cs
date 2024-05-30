@@ -13,7 +13,7 @@ namespace SurvivalDemo.EcsCore.Systems
         public void Init(IEcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
-            _filter = world.Filter<Unit>().Inc<ControlledByPlayer>().End();
+            _filter = world.Filter<Character>().Inc<ControlledByPlayer>().End();
             _moveCommandPool = world.GetPool<MoveCommand>();
         }
 

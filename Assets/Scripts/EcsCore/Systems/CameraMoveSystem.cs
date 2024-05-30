@@ -1,35 +1,34 @@
 ﻿using Leopotam.EcsLite;
 using SurvivalDemo.EcsCore.Components;
-using UnityEngine;
+using SurvivalDemo.Gameplay;
 
 namespace SurvivalDemo.EcsCore.Systems
 {
     public class CameraMoveSystem : IEcsInitSystem, IEcsRunSystem
     {
-        private readonly Transform _cameraAnchor;
+        private readonly CameraView _cameraView;
 
         private EcsFilter _filter;
-        private EcsPool<Unit> _unitPool;
+        private EcsPool<Transform> _transformPool;
 
-        public CameraMoveSystem(Transform cameraAnchor)
+        public CameraMoveSystem(CameraView cameraView)
         {
-            _cameraAnchor = cameraAnchor;
+            _cameraView = cameraView;
         }
 
         public void Init(IEcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
-            _filter = world.Filter<Unit>().Inc<ControlledByPlayer>().End();
-            _unitPool = world.GetPool<Unit>();
+            _filter = world.Filter<Character>().Inc<ControlledByPlayer>().End();
+            _transformPool = world.GetPool<Transform>();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (int entity in _filter)
             {
-                ref Unit unit = ref _unitPool.Get(entity);
-
-                _cameraAnchor.position = unit.Position;
+                Transform transform = _transformPool.Get(entity);
+                _cameraView.SetPosition(transform.Position);
             }
         }
     }

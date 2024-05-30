@@ -303,7 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sharedAssets: {fileID: 11400000, guid: 7031ed3645bcadd44a4fce39f3c264e1, type: 2}
   _playerSpawnPoint: {fileID: 333569513}
-  _cameraAnchor: {fileID: 918635859}
+  _cameraView: {fileID: 918635860}
 --- !u!4 &494483757
 Transform:
   m_ObjectHideFlags: 0
@@ -453,6 +453,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 918635859}
+  - component: {fileID: 918635860}
   m_Layer: 0
   m_Name: CameraAncor
   m_TagString: Untagged
@@ -476,6 +477,19 @@ Transform:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &918635860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918635858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a355083766be744b1e28924c7b1889, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _anchor: {fileID: 918635859}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

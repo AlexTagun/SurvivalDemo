@@ -2,10 +2,19 @@
 
 namespace SurvivalDemo.EcsCore.Components
 {
-    public struct Unit {
-        public Transform Transform;
+    public struct Character { }
+
+    public struct InstantiatePlayerRequest { }
+    public struct InstantiateEnemyRequest { }
+
+    public struct Transform
+    {
         public Vector3 Position;
         public Quaternion Rotation;
-        public float MoveSpeed;
+    }
+
+    public struct MoveSpeed
+    {
+        public float Value;
     }
 }

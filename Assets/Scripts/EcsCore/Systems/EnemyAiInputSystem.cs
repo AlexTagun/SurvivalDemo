@@ -1,6 +1,7 @@
 ﻿using Leopotam.EcsLite;
 using SurvivalDemo.EcsCore.Components;
 using UnityEngine;
+using Transform = SurvivalDemo.EcsCore.Components.Transform;
 
 namespace SurvivalDemo.EcsCore.Systems
 {
@@ -8,15 +9,15 @@ namespace SurvivalDemo.EcsCore.Systems
     {
         private EcsFilter _playerFilter;
         private EcsFilter _enemyFilter;
-        private EcsPool<Unit> _unitPool;
+        private EcsPool<Transform> _transformPool;
         private EcsPool<MoveCommand> _moveCommandPool;
 
         public void Init(IEcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
-            _playerFilter = world.Filter<Unit>().Inc<ControlledByPlayer>().End();
-            _enemyFilter = world.Filter<Unit>().Inc<ControlledByAi>().End();
-            _unitPool = world.GetPool<Unit>();
+            _playerFilter = world.Filter<Character>().Inc<ControlledByPlayer>().Inc<Transform>().End();
+            _enemyFilter = world.Filter<Character>().Inc<ControlledByAi>().Inc<Transform>().End();
+            _transformPool = world.GetPool<Transform>();
             _moveCommandPool = world.GetPool<MoveCommand>();
         }
 
@@ -35,15 +36,15 @@ namespace SurvivalDemo.EcsCore.Systems
                 return;
             }
 
-            ref Unit playerUnit = ref _unitPool.Get(playerEntity);
+            ref Transform playerTransform = ref _transformPool.Get(playerEntity);
 
 
             foreach (int entity in _enemyFilter)
             {
-                ref Unit enemyUnit = ref _unitPool.Get(entity);
+                ref Transform enemyTransform = ref _transformPool.Get(entity);
                 ref MoveCommand moveCmd = ref _moveCommandPool.Add(entity);
 
-                Vector3 direction = playerUnit.Position - enemyUnit.Position;
+                Vector3 direction = playerTransform.Position - enemyTransform.Position;
                 direction.Normalize();
 
                 moveCmd.Forward = direction.z;

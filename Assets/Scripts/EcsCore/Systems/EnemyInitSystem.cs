@@ -1,11 +1,9 @@
 ﻿using Leopotam.EcsLite;
 using SurvivalDemo.EcsCore.Components;
-using SurvivalDemo.EcsCore.Configs;
-using SurvivalDemo.EcsCore.Views;
 using System;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
+using Transform = SurvivalDemo.EcsCore.Components.Transform;
 
 namespace SurvivalDemo.EcsCore.Systems
 {
@@ -14,19 +12,25 @@ namespace SurvivalDemo.EcsCore.Systems
         private readonly TimeSpan _spawnCooldown = TimeSpan.FromSeconds(1);
 
         private EcsWorld _world;
-        private SharedAssets _sharedAssets;
         private EcsFilter _filter;
-        private EcsPool<Unit> _unitPool;
+        private EcsPool<Character> _characterPool;
         private EcsPool<ControlledByAi> _controlledByAiPool;
+        private EcsPool<Transform> _transformPool;
+        private EcsPool<Health> _healthPool;
+        private EcsPool<MoveSpeed> _moveSpeedPool;
+        private EcsPool<InstantiateEnemyRequest> _requestPool;
         private TimeSpan _timer;
 
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _sharedAssets = systems.GetShared<SharedAssets>();
-            _filter = _world.Filter<Unit>().Inc<ControlledByPlayer>().End();
-            _unitPool = _world.GetPool<Unit>();
+            _filter = _world.Filter<Character>().Inc<Transform>().Inc<ControlledByPlayer>().End();
+            _characterPool = _world.GetPool<Character>();
+            _transformPool = _world.GetPool<Transform>();
             _controlledByAiPool = _world.GetPool<ControlledByAi>();
+            _healthPool = _world.GetPool<Health>();
+            _moveSpeedPool = _world.GetPool<MoveSpeed>();
+            _requestPool = _world.GetPool<InstantiateEnemyRequest>();
 
             _timer = _spawnCooldown;
         }
@@ -44,32 +48,37 @@ namespace SurvivalDemo.EcsCore.Systems
 
             foreach (int entity in _filter)
             {
-                ref Unit unit = ref _unitPool.Get(entity);
-                SpawnEnemy(GetRandomPoint(unit));
+                ref Transform transform = ref _transformPool.Get(entity);
+                SpawnEnemy(GetRandomPoint(transform));
             }
         }
 
-        private static Vector3 GetRandomPoint(Unit unit)
+        private static Vector3 GetRandomPoint(Transform transform)
         {
             Vector2 point = Random.insideUnitCircle;
             point.Normalize();
             Vector3 delta = new(point.x, 0, point.y);
-            return unit.Position + delta * 10;
+            return transform.Position + delta * 10;
         }
 
         private void SpawnEnemy(Vector3 spawnPosition)
         {
-            int playerEntity = _world.NewEntity();
+            int entity = _world.NewEntity();
 
-            ref Unit unit = ref _unitPool.Add(playerEntity);
-            _controlledByAiPool.Add(playerEntity);
+            _characterPool.Add(entity);
+            ref Transform transform = ref _transformPool.Add(entity);
+            ref MoveSpeed moveSpeed = ref _moveSpeedPool.Add(entity);
+            _controlledByAiPool.Add(entity);
 
-            EnemyView enemyGo = Object.Instantiate(_sharedAssets.EnemyView, spawnPosition, Quaternion.identity);
+            transform.Position = spawnPosition;
+            transform.Rotation = Quaternion.identity;
+            moveSpeed.Value = 2.5f;
 
-            unit.Transform = enemyGo.transform;
-            unit.Position = spawnPosition;
-            unit.Rotation = Quaternion.identity;
-            unit.MoveSpeed = 2.5f;
+            ref Health health = ref _healthPool.Add(entity);
+            health.Max = 100;
+            health.Current = 100;
+
+            _requestPool.Add(entity);
         }
     }
 }

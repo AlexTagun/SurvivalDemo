@@ -1,7 +1,7 @@
 using SurvivalDemo.EcsCore.Views;
 using UnityEngine;
 
-namespace SurvivalDemo.EcsCore.Configs
+namespace SurvivalDemo.EcsCore.Shared
 {
     [CreateAssetMenu]
     public class SharedAssets : ScriptableObject
