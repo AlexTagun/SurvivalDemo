@@ -1,18 +1,27 @@
 using Leopotam.EcsLite;
+using SurvivalDemo.EcsCore.Configs;
+using SurvivalDemo.EcsCore.Systems;
+using SurvivalDemo.Gameplay.SpawnPoints;
 using UnityEngine;
 
-namespace Client
+namespace SurvivalDemo.Startup
 {
     internal sealed class EcsStartup : MonoBehaviour
     {
+        [SerializeField] private SharedAssets _sharedAssets;
+        [SerializeField] private PlayerSpawnPoint _playerSpawnPoint;
+
         private EcsWorld _world;
         private IEcsSystems _systems;
 
         private void Start()
         {
             _world = new EcsWorld();
-            _systems = new EcsSystems(_world);
+            _systems = new EcsSystems(_world, _sharedAssets);
             _systems
+                .Add(new UserKeyboardInputSystem())
+                .Add(new PlayerInitSystem(_playerSpawnPoint))
+                .Add(new UnitMoveSystem())
 
                 // register your systems here, for example:
                 // .Add (new TestSystem1 ())
