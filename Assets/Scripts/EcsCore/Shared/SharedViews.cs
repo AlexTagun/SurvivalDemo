@@ -5,7 +5,8 @@ namespace SurvivalDemo.EcsCore.Shared
 {
     public class SharedViews
     {
-        public Dictionary<int, PlayerView> PlayerViews = new();
-        public Dictionary<int, EnemyView> EnemyViews = new();
+        public readonly Dictionary<int, PlayerView> PlayerViews = new();
+        public readonly Dictionary<int, EnemyView> EnemyViews = new();
+        public readonly Dictionary<int, ProjectileView> ProjectileViews = new();
     }
 }

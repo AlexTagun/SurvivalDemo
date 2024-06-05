@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerView: {fileID: 3470381398345656491, guid: e24e1bc6a6ac34e428a247ac166817f0, type: 3}
   EnemyView: {fileID: 1496620929683658228, guid: c963bbbcc53eb57438f8e9bdce05ed06, type: 3}
+  ProjectileView: {fileID: 526391635329268655, guid: f1e802adf0f58bf4f93795ef9fcee318, type: 3}

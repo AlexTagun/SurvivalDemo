@@ -10,11 +10,12 @@ namespace SurvivalDemo.EcsCore.Systems
         private readonly PlayerSpawnPoint _spawnPoint;
 
         private EcsPool<Character> _characterPool;
+        private EcsPool<Transform> _transformPool;
+        private EcsPool<ControlledByPlayer> _controlledByPlayerPool;
         private EcsPool<MoveSpeed> _moveSpeedPool;
         private EcsPool<Health> _healthPool;
-        private EcsPool<ControlledByPlayer> _controlledByPlayerPool;
-        private EcsPool<Transform> _transformPool;
         private EcsPool<InstantiatePlayerRequest> _requestPool;
+        private EcsPool<WeaponFireball> _weaponFireballPool;
 
         public PlayerInitSystem(PlayerSpawnPoint spawnPoint)
         {
@@ -27,28 +28,31 @@ namespace SurvivalDemo.EcsCore.Systems
 
             _characterPool = world.GetPool<Character>();
             _transformPool = world.GetPool<Transform>();
-            _moveSpeedPool = world.GetPool<MoveSpeed>();
-            _requestPool = world.GetPool<InstantiatePlayerRequest>();
-            _healthPool = world.GetPool<Health>();
             _controlledByPlayerPool = world.GetPool<ControlledByPlayer>();
+            _moveSpeedPool = world.GetPool<MoveSpeed>();
+            _healthPool = world.GetPool<Health>();
+            _requestPool = world.GetPool<InstantiatePlayerRequest>();
+            _weaponFireballPool = world.GetPool<WeaponFireball>();
 
-            int playerEntity = world.NewEntity();
+            int entity = world.NewEntity();
 
-            _characterPool.Add(playerEntity);
-            _controlledByPlayerPool.Add(playerEntity);
+            _characterPool.Add(entity);
 
-            ref Transform transform = ref _transformPool.Add(playerEntity);
+            ref Transform transform = ref _transformPool.Add(entity);
             transform.Position = _spawnPoint.Position;
             transform.Rotation = _spawnPoint.Rotation;
 
-            ref MoveSpeed moveSpeed = ref _moveSpeedPool.Add(playerEntity);
+            _controlledByPlayerPool.Add(entity);
+
+            ref MoveSpeed moveSpeed = ref _moveSpeedPool.Add(entity);
             moveSpeed.Value = 3;
 
-            ref Health health = ref _healthPool.Add(playerEntity);
+            ref Health health = ref _healthPool.Add(entity);
             health.Max = 100;
             health.Current = 100;
 
-            _requestPool.Add(playerEntity);
+            _requestPool.Add(entity);
+            _weaponFireballPool.Add(entity);
         }
     }
 }

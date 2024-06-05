@@ -9,6 +9,7 @@ namespace SurvivalDemo.EcsCore.Systems
     {
         private EcsFilter _playerFilter;
         private EcsFilter _enemyFilter;
+
         private EcsPool<Transform> _transformPool;
         private EcsPool<MoveCommand> _moveCommandPool;
 
@@ -17,6 +18,7 @@ namespace SurvivalDemo.EcsCore.Systems
             EcsWorld world = systems.GetWorld();
             _playerFilter = world.Filter<Character>().Inc<ControlledByPlayer>().Inc<Transform>().End();
             _enemyFilter = world.Filter<Character>().Inc<ControlledByAi>().Inc<Transform>().End();
+
             _transformPool = world.GetPool<Transform>();
             _moveCommandPool = world.GetPool<MoveCommand>();
         }
@@ -37,7 +39,6 @@ namespace SurvivalDemo.EcsCore.Systems
             }
 
             ref Transform playerTransform = ref _transformPool.Get(playerEntity);
-
 
             foreach (int entity in _enemyFilter)
             {

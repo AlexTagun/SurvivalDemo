@@ -13,18 +13,21 @@ namespace SurvivalDemo.EcsCore.Systems
 
         private EcsWorld _world;
         private EcsFilter _filter;
+
         private EcsPool<Character> _characterPool;
-        private EcsPool<ControlledByAi> _controlledByAiPool;
         private EcsPool<Transform> _transformPool;
+        private EcsPool<ControlledByAi> _controlledByAiPool;
         private EcsPool<Health> _healthPool;
         private EcsPool<MoveSpeed> _moveSpeedPool;
         private EcsPool<InstantiateEnemyRequest> _requestPool;
+
         private TimeSpan _timer;
 
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _filter = _world.Filter<Character>().Inc<Transform>().Inc<ControlledByPlayer>().End();
+
             _characterPool = _world.GetPool<Character>();
             _transformPool = _world.GetPool<Transform>();
             _controlledByAiPool = _world.GetPool<ControlledByAi>();

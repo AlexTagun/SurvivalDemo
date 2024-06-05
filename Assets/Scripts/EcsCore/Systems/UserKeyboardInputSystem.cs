@@ -8,12 +8,14 @@ namespace SurvivalDemo.EcsCore.Systems
     public class UserKeyboardInputSystem : IEcsInitSystem, IEcsRunSystem
     {
         private EcsFilter _filter;
+
         private EcsPool<MoveCommand> _moveCommandPool;
 
         public void Init(IEcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
             _filter = world.Filter<Character>().Inc<ControlledByPlayer>().End();
+
             _moveCommandPool = world.GetPool<MoveCommand>();
         }
 

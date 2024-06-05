@@ -2,34 +2,32 @@
 using SurvivalDemo.EcsCore.Components;
 using SurvivalDemo.EcsCore.Shared;
 using SurvivalDemo.EcsCore.Views;
+using UnityEngine;
 
 namespace SurvivalDemo.EcsCore.Systems
 {
-    public class PlayerViewUpdateSystem : IEcsInitSystem, IEcsRunSystem
+    public class EnemyViewDestroySystem : IEcsInitSystem, IEcsRunSystem
     {
         private SharedViews _sharedViews;
 
+        private EcsWorld _world;
         private EcsFilter _filter;
-
-        private EcsPool<Transform> _transformPool;
 
         public void Init(IEcsSystems systems)
         {
-            EcsWorld world = systems.GetWorld();
             _sharedViews = systems.GetShared<SharedData>().Views;
 
-            _filter = world.Filter<Character>().Inc<Transform>().Inc<ControlledByPlayer>().End();
-
-            _transformPool = world.GetPool<Transform>();
+            _world = systems.GetWorld();
+            _filter = _world.Filter<DestroyEnemyRequest>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (int entity in _filter)
             {
-                Transform transform = _transformPool.Get(entity);
-
-                _sharedViews.PlayerViews[entity].UpdateTransform(transform.Position, transform.Rotation);
+                _sharedViews.EnemyViews.Remove(entity, out EnemyView view);
+                Object.Destroy(view.gameObject);
+                _world.DelEntity(entity);
             }
         }
     }

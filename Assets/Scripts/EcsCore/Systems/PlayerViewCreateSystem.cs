@@ -11,7 +11,9 @@ namespace SurvivalDemo.EcsCore.Systems
     {
         private SharedAssets _sharedAssets;
         private SharedViews _sharedViews;
+
         private EcsFilter _filter;
+
         private EcsPool<InstantiatePlayerRequest> _requestPool;
         private EcsPool<Transform> _transformPool;
 
@@ -22,10 +24,10 @@ namespace SurvivalDemo.EcsCore.Systems
             _sharedAssets = sharedData.Assets;
             _sharedViews = sharedData.Views;
 
+            _filter = world.Filter<InstantiatePlayerRequest>().End();
+
             _requestPool = world.GetPool<InstantiatePlayerRequest>();
             _transformPool = world.GetPool<Transform>();
-
-            _filter = world.Filter<InstantiatePlayerRequest>().End();
         }
 
         public void Run(IEcsSystems systems)

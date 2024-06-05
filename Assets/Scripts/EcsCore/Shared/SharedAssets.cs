@@ -8,5 +8,6 @@ namespace SurvivalDemo.EcsCore.Shared
     {
         public PlayerView PlayerView;
         public EnemyView EnemyView;
+        public ProjectileView ProjectileView;
     }
 }

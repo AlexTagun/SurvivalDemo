@@ -9,6 +9,7 @@ namespace SurvivalDemo.EcsCore.Systems
         private readonly CameraView _cameraView;
 
         private EcsFilter _filter;
+
         private EcsPool<Transform> _transformPool;
 
         public CameraMoveSystem(CameraView cameraView)
@@ -20,6 +21,7 @@ namespace SurvivalDemo.EcsCore.Systems
         {
             EcsWorld world = systems.GetWorld();
             _filter = world.Filter<Character>().Inc<ControlledByPlayer>().End();
+
             _transformPool = world.GetPool<Transform>();
         }
 

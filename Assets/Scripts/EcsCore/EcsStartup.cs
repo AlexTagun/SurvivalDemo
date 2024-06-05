@@ -34,20 +34,23 @@ namespace SurvivalDemo.Startup
                 .Add(new PlayerViewCreateSystem())
                 .Add(new PlayerViewUpdateSystem())
 
+                .Add(new EnemyHealthSystem())
                 .Add(new EnemyInitSystem())
                 .Add(new EnemyViewCreateSystem())
                 .Add(new EnemyViewUpdateSystem())
+                .Add(new EnemyViewDestroySystem())
 
-                // register your systems here, for example:
-                // .Add (new TestSystem1 ())
-                // .Add (new TestSystem2 ())
+                .Add(new ProjectileMoveSystem())
+                .Add(new ProjectileDamageSystem())
 
-                // register additional worlds here, for example:
-                // .AddWorld (new EcsWorld (), "events")
+                .Add(new ProjectileViewCreateSystem())
+                .Add(new ProjectileViewUpdateSystem())
+                .Add(new ProjectileViewDestroySystem())
+
+                .Add(new WeaponFireballSystem())
+
                 #if UNITY_EDITOR
 
-                // add debug systems for custom worlds here, for example:
-                // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
                 #endif
                 .Init();

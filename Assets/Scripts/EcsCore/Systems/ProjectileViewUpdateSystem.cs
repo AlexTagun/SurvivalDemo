@@ -1,11 +1,10 @@
 ﻿using Leopotam.EcsLite;
 using SurvivalDemo.EcsCore.Components;
 using SurvivalDemo.EcsCore.Shared;
-using SurvivalDemo.EcsCore.Views;
 
 namespace SurvivalDemo.EcsCore.Systems
 {
-    public class PlayerViewUpdateSystem : IEcsInitSystem, IEcsRunSystem
+    public class ProjectileViewUpdateSystem : IEcsInitSystem, IEcsRunSystem
     {
         private SharedViews _sharedViews;
 
@@ -16,9 +15,10 @@ namespace SurvivalDemo.EcsCore.Systems
         public void Init(IEcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
+
             _sharedViews = systems.GetShared<SharedData>().Views;
 
-            _filter = world.Filter<Character>().Inc<Transform>().Inc<ControlledByPlayer>().End();
+            _filter = world.Filter<Projectile>().Inc<Transform>().End();
 
             _transformPool = world.GetPool<Transform>();
         }
@@ -27,9 +27,8 @@ namespace SurvivalDemo.EcsCore.Systems
         {
             foreach (int entity in _filter)
             {
-                Transform transform = _transformPool.Get(entity);
-
-                _sharedViews.PlayerViews[entity].UpdateTransform(transform.Position, transform.Rotation);
+                ref Transform transform = ref _transformPool.Get(entity);
+                _sharedViews.ProjectileViews[entity].UpdateTransform(transform.Position, transform.Rotation);
             }
         }
     }

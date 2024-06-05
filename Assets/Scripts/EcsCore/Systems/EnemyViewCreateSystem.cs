@@ -11,7 +11,9 @@ namespace SurvivalDemo.EcsCore.Systems
     {
         private SharedAssets _sharedAssets;
         private SharedViews _sharedViews;
+
         private EcsFilter _filter;
+
         private EcsPool<InstantiateEnemyRequest> _requestPool;
         private EcsPool<Transform> _transformPool;
 
@@ -22,17 +24,17 @@ namespace SurvivalDemo.EcsCore.Systems
             _sharedAssets = sharedData.Assets;
             _sharedViews = sharedData.Views;
 
+            _filter = world.Filter<InstantiateEnemyRequest>().End();
+
             _requestPool = world.GetPool<InstantiateEnemyRequest>();
             _transformPool = world.GetPool<Transform>();
-
-            _filter = world.Filter<InstantiateEnemyRequest>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (int entity in _filter)
             {
-                ref Transform transform = ref _transformPool.Get(entity);
+                Transform transform = _transformPool.Get(entity);
 
                 EnemyView enemyGo =
                     Object.Instantiate(_sharedAssets.EnemyView, transform.Position, transform.Rotation);
